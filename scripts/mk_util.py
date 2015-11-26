@@ -1504,6 +1504,8 @@ class DotNetDLLComponent(Component):
         if not DOTNET_ENABLED or IS_WINDOWS:
             return
         self._install_or_uninstall_to_gac(out, install=False)
+        pkg_config_file = os.path.join('lib','pkgconfig','{}.pc'.format(self.gac_pkg_name()))
+        MakeRuleCmd.remove_installed_files(out, pkg_config_file)
 
 class JavaDLLComponent(Component):
     def __init__(self, name, dll_name, package_name, manifest_file, path, deps):
