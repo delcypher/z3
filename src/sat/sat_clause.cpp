@@ -145,9 +145,18 @@ namespace sat {
                 return i;
         i = m_num_segments;
         m_num_segments++;
+
+        if (i >= c_max_segments) {
+          printf("About to do out of bounds access!\n");
+        }
+
+        // This bound check is wrong
         if (i > c_max_segments)
             throw default_exception("segment out of range");
         m_segments[i] = ptr;
+        if (i >= c_max_segments) {
+          printf("Did out of bounds access! If doing an ASan build do I get printed?\n");
+        }
         return i;
     }
 #endif
