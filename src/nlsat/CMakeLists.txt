@@ -10,4 +10,6 @@ z3_add_component(nlsat
     "math/polynomial"
     "sat"
     "util"
+  PYG_FILES
+    nlsat_params.pyg
 )

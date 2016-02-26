@@ -15,4 +15,6 @@ z3_add_component(sls_tactic
     "tactic/core"
     "tactic/bv"
     "util"
+  PYG_FILES
+    sls_params.pyg
 )

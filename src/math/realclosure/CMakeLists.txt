@@ -5,4 +5,6 @@ z3_add_component(realclosure
   INCLUDE_DIRS
     "math/interval"
     "util"
+  PYG_FILES
+    rcf_params.pyg
 )

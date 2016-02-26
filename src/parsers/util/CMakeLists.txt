@@ -7,4 +7,6 @@ z3_add_component(parser_util
   INCLUDE_DIRS
     "ast"
     "util"
+  PYG_FILES
+    parser_params.pyg
 )

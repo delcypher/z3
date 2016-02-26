@@ -41,4 +41,6 @@ z3_add_component(muz
     "tactic"
     "tactic/aig"
     "util"
+  PYG_FILES
+    fixedpoint_params.pyg
 )

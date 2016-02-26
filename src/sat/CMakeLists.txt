@@ -21,4 +21,9 @@ z3_add_component(sat
     sat_watched.cpp
   INCLUDE_DIRS
     util
+  PYG_FILES
+    sat_asymm_branch_params.pyg
+    sat_params.pyg
+    sat_scc_params.pyg
+    sat_simplifier_params.pyg
 )

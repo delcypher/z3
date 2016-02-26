@@ -10,5 +10,7 @@ z3_add_component(polynomial
     upolynomial_factorization.cpp
   INCLUDE_DIRS
     util
+  PYG_FILES
+    algebraic_params.pyg
 )
 

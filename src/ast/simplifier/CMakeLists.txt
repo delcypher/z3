@@ -27,4 +27,8 @@ z3_add_component(simplifier
     "math/polynomial"
     "math/automata"
     "util"
+  PYG_FILES
+    arith_simplifier_params_helper.pyg
+    array_simplifier_params_helper.pyg
+    bv_simplifier_params_helper.pyg
 )

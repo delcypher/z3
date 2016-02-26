@@ -10,4 +10,6 @@ z3_add_component(normal_forms
     "math/polynomial"
     "math/automata"
     "util"
+  PYG_FILES
+    nnf_params.pyg
 )

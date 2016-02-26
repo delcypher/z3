@@ -53,4 +53,6 @@ z3_add_component(smtlogic_tactics
     "tactic/bv"
     "tactic/nlsat_smt"
     "util"
+  PYG_FILES
+    qfufbv_tactic_params.pyg
 )

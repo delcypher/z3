@@ -22,4 +22,6 @@ z3_add_component(smt_params
     "parsers/smt2"
     "parsers/util"
     "util"
+  PYG_FILES
+    smt_params_helper.pyg
 )

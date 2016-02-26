@@ -16,4 +16,6 @@ z3_add_component(pattern
     "solver"
     "tactic"
     "util"
+  PYG_FILES
+    pattern_inference_params_helper.pyg
 )

@@ -18,4 +18,7 @@ z3_add_component(ackermannization
     "solver"
     "tactic"
     "util"
+  PYG_FILES
+    ackermannization_params.pyg
+    ackermannize_bv_tactic_params.pyg
 )

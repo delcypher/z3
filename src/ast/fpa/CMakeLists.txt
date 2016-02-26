@@ -8,4 +8,6 @@ z3_add_component(fpa
     "math/polynomial"
     "math/automata"
     "util"
+  PYG_FILES
+    fpa2bv_rewriter_params.pyg
 )

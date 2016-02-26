@@ -13,4 +13,6 @@ z3_add_component(solver
     "model"
     "tactic"
     "util"
+  PYG_FILES
+    combined_solver_params.pyg
 )

@@ -56,4 +56,6 @@ z3_add_component(opt
     "tactic/nlsat_smt"
     "tactic/smtlogics"
     "util"
+  PYG_FILES
+    opt_params.pyg
 )

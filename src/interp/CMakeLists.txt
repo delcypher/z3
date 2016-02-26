@@ -21,4 +21,6 @@ z3_add_component(interp
     "solver"
     "tactic"
     "util"
+  PYG_FILES
+    interp_params.pyg
 )

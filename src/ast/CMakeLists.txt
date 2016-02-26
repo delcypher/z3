@@ -43,4 +43,6 @@ z3_add_component(ast
   INCLUDE_DIRS
     "math/polynomial"
     "util"
+  PYG_FILES
+    pp_params.pyg
 )
