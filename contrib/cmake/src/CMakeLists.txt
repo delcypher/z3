@@ -102,6 +102,7 @@ add_subdirectory(parsers/smt)
 add_subdirectory(opt)
 add_subdirectory(api)
 add_subdirectory(api/dll)
+add_subdirectory(all_init)
 
 ################################################################################
 # libz3

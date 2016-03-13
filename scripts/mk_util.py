@@ -1105,6 +1105,22 @@ def comp_components(c1, c2):
 def sort_components(cnames):
     return sorted(cnames, key=lambda c: get_component(c).id, reverse=True)
 
+# Used to represent a component that contains generated initialisation code,
+# i.e.
+# - gparams_register_modules.cpp
+# - install_tactic.cpp
+# - mem_initializer.cpp
+class InitLibComponent(LibComponent):
+    def __init__(self, name, path, deps):
+        assert 'tactic' in deps
+        assert 'cmd_context' in deps
+        LibComponent.__init__(self, name, path, deps, includes2install=[])
+
+    def require_install_tactics(self):
+        return True
+    def require_mem_initializer(self):
+        return True
+
 class ExeComponent(Component):
     def __init__(self, name, exe_name, path, deps, install):
         Component.__init__(self, name, path, deps)
@@ -1124,10 +1140,19 @@ class ExeComponent(Component):
         for cppfile in get_cpp_files(self.src_dir):
             objfile = '%s$(OBJ_EXT)' % os.path.join(self.build_dir, os.path.splitext(cppfile)[0])
             objs.append(objfile)
+        all_init_component = get_component('all_init')
+        # all_init is circularly dependent so must use object files
+        # rather than libraries so link dependencies are satisified
+        if all_init_component.name in deps:
+            for cppfile in get_cpp_files(all_init_component.src_dir):
+                objfile = '%s$(OBJ_EXT)' % os.path.join(all_init_component.build_dir, os.path.splitext(cppfile)[0])
+                objs.append(objfile)
         for obj in objs:
             out.write(' ')
             out.write(obj)
         for dep in deps:
+            if dep == all_init_component.name:
+                continue
             c_dep = get_component(dep)
             out.write(' ' + c_dep.get_link_name())
         out.write('\n')
@@ -1136,6 +1161,8 @@ class ExeComponent(Component):
             out.write(' ')
             out.write(obj)
         for dep in deps:
+            if dep == all_init_component.name:
+                continue
             c_dep = get_component(dep)
             out.write(' ' + c_dep.get_link_name())
         out.write(' ' + FOCI2LIB)
@@ -1143,10 +1170,10 @@ class ExeComponent(Component):
         out.write('%s: %s\n\n' % (self.name, exefile))
 
     def require_install_tactics(self):
-        return ('tactic' in self.deps) and ('cmd_context' in self.deps)
+        return ('tactic' in self.deps) and ('cmd_context' in self.deps) and ('all_init' not in self.deps)
 
     def require_mem_initializer(self):
-        return True
+        return 'all_init' not in self.deps
 
     # All executables (to be installed) are included in the all: rule
     def main_component(self):
@@ -1247,10 +1274,19 @@ class DLLComponent(Component):
             for cppfile in get_cpp_files(reexport.src_dir):
                 objfile = '%s$(OBJ_EXT)' % os.path.join(reexport.build_dir, os.path.splitext(cppfile)[0])
                 objs.append(objfile)
+        # all_init is circularly dependent so must use object files
+        # rather than libraries so link dependencies are satisified
+        all_init_component = get_component('all_init')
+        if all_init_component.name in deps:
+            for cppfile in get_cpp_files(all_init_component.src_dir):
+                objfile = '%s$(OBJ_EXT)' % os.path.join(all_init_component.build_dir, os.path.splitext(cppfile)[0])
+                objs.append(objfile)
         for obj in objs:
             out.write(' ')
             out.write(obj)
         for dep in deps:
+            if dep == all_init_component.name:
+                continue
             if dep not in self.reexports:
                 c_dep = get_component(dep)
                 out.write(' ' + c_dep.get_link_name())
@@ -1260,7 +1296,9 @@ class DLLComponent(Component):
             out.write(' ')
             out.write(obj)
         for dep in deps:
-            if dep not in self.reexports:
+            if dep == all_init_component.name:
+                continue
+            elif dep not in self.reexports:
                 c_dep = get_component(dep)
                 out.write(' ' + c_dep.get_link_name())
         out.write(' ' + FOCI2LIB)
@@ -1305,10 +1343,10 @@ class DLLComponent(Component):
         return self.install
 
     def require_install_tactics(self):
-        return ('tactic' in self.deps) and ('cmd_context' in self.deps)
+        return ('tactic' in self.deps) and ('cmd_context' in self.deps) and ('all_init' not in self.deps)
 
     def require_mem_initializer(self):
-        return True
+        return 'all_init' not in self.deps
 
     def require_def_file(self):
         return IS_WINDOWS and self.export_files
@@ -2110,6 +2148,25 @@ def reg_component(name, c):
 
 def add_lib(name, deps=[], path=None, includes2install=[]):
     c = LibComponent(name, path, deps, includes2install)
+    reg_component(name, c)
+
+def add_all_init_lib(name, path=None):
+    """
+    Create library that contains three generated files:
+
+    gparams_register_modules.cpp
+    install_tactic.cpp
+    mem_initializer.cpp
+
+    where they are generated under the assumption that all
+    other declared ``LibComponent``s are dependencies.
+    """
+    # Get all lib components
+    libComponents = []
+    for c in get_components():
+        if isinstance(c, LibComponent):
+            libComponents.append(c.name)
+    c = InitLibComponent(name, path, libComponents)
     reg_component(name, c)
 
 def add_hlib(name, path=None, includes2install=[]):
