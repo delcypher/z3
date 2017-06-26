@@ -1,0 +1,18 @@
+sudo: required
+services:
+  - docker
+env:
+  # Configurations
+  matrix:
+    # Build and test everything but use Clang as the compiler
+    - LINUX_BASE=ubuntu_14.04 C_COMPILER=/usr/bin/clang-3.9 CXX_COMPILER=/usr/bin/clang++-3.9 TARGET_ARCH=x86_64 Z3_VERBOSE_BUILD_OUTPUT=1
+    # Build and test everything but use GCC as the compiler
+    - LINUX_BASE=ubuntu_14.04 C_COMPILER=/usr/bin/gcc CXX_COMPILER=/usr/bin/g++ TARGET_ARCH=x86_64 Z3_VERBOSE_BUILD_OUTPUT=1
+
+# TODO: OSX support
+#matrix:
+#  include:
+#    - os: osx
+#      osx_image: xcode 8.2
+script:
+  - contrib/ci/scripts/travis_ci_entry_point.sh

@@ -21,7 +21,9 @@ RUN apt-get update && \
         mono-devel \
         ninja-build \
         python3 \
-        python2.7
+        python3-setuptools \
+        python2.7 \
+        python-setuptools
 
 # Create `user` user for container with password `user`.  and give it
 # password-less sudo access
@@ -55,6 +57,9 @@ ARG USE_OPENMP=1
 ARG Z3_BUILD_TYPE=RelWithDebInfo
 ARG Z3_CMAKE_GENERATOR=Ninja
 ARG Z3_INSTALL_PREFIX=/usr
+# Blank default indicates use latest.
+ARG Z3_SYSTEM_TEST_GIT_REVISION
+ARG Z3_VERBOSE_BUILD_OUTPUT=0
 ARG TEST_INSTALL=1
 
 ENV \
@@ -66,10 +71,10 @@ ENV \
   JAVA_BINDINGS=${JAVA_BINDINGS} \
   PYTHON_BINDINGS=${PYTHON_BINDINGS} \
   PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE} \
-  TARGET_ARCH=${TARGET_ARCH} \
-  TEST_INSTALL=${TEST_INSTALL} \
   RUN_SYSTEM_TESTS=${RUN_SYSTEM_TESTS} \
   RUN_UNIT_TESTS=${RUN_UNIT_TESTS} \
+  TARGET_ARCH=${TARGET_ARCH} \
+  TEST_INSTALL=${TEST_INSTALL} \
   UBSAN_BUILD=${UBSAN_BUILD} \
   USE_LIBGMP=${USE_LIBGMP} \
   USE_LTO=${USE_LTO} \
@@ -77,6 +82,9 @@ ENV \
   Z3_SRC_DIR=/home/user/z3_src \
   Z3_BUILD_DIR=/home/user/z3_build \
   Z3_CMAKE_GENERATOR=${Z3_CMAKE_GENERATOR} \
+  Z3_VERBOSE_BUILD_OUTPUT=${Z3_VERBOSE_BUILD_OUTPUT} \
+  Z3_SYSTEM_TEST_DIR=/home/user/z3_system_test \
+  Z3_SYSTEM_TEST_GIT_REVISION=${Z3_SYSTEM_TEST_GIT_REVISION} \
   Z3_INSTALL_PREFIX=${Z3_INSTALL_PREFIX}
 
 # Build Z3

@@ -123,4 +123,5 @@ cmake \
   "${Z3_SRC_DIR}"
 
 # Build
-cmake --build $(pwd) -- -j$(nproc)
+source ${SCRIPT_DIR}/set_generator_args.sh
+cmake --build $(pwd) "${GENERATOR_ARGS[@]}"

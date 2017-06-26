@@ -1,5 +1,7 @@
 #!/bin/bash
 
+SCRIPT_DIR="$( cd ${BASH_SOURCE[0]%/*} ; echo $PWD )"
+
 set -x
 set -e
 set -o pipefail
@@ -12,8 +14,11 @@ if [ "X${RUN_UNIT_TESTS}" != "X1" ]; then
   exit 0
 fi
 
+# Set CMake generator args
+source ${SCRIPT_DIR}/set_generator_args.sh
+
 cd "${Z3_BUILD_DIR}"
 
 # Build and run internal tests
-cmake --build $(pwd) --target test-z3 -- -j$(nproc)
+cmake --build $(pwd) --target test-z3 "${GENERATOR_ARGS[@]}"
 ./test-z3

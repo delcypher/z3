@@ -17,23 +17,26 @@ set -o pipefail
 # Set compiler flags
 source ${SCRIPT_DIR}/set_compiler_flags.sh
 
+# Set CMake generator args
+source ${SCRIPT_DIR}/set_generator_args.sh
+
 cd "${Z3_BUILD_DIR}"
 
 # Build and run C example
-cmake --build $(pwd) --target c_example
+cmake --build $(pwd) --target c_example "${GENERATOR_ARGS[@]}"
 examples/c_example_build_dir/c_example
 
 # Build and run C++ example
-cmake --build $(pwd) --target cpp_example
+cmake --build $(pwd) --target cpp_example "${GENERATOR_ARGS[@]}"
 examples/cpp_example_build_dir/cpp_example
 
 # Build and run tptp5 example
-cmake --build $(pwd) --target z3_tptp5
+cmake --build $(pwd) --target z3_tptp5 "${GENERATOR_ARGS[@]}"
 # FIXME: Do something more useful with example
 examples/tptp_build_dir/z3_tptp5 -help
 
 # Build an run c_maxsat_example
-cmake --build $(pwd) --target c_maxsat_example
+cmake --build $(pwd) --target c_maxsat_example "${GENERATOR_ARGS[@]}"
 # FIXME: Once maxsat is fixed so it doesn't crash, enable running it
 #./c_maxsat_example ${Z3_SRC_DIR}/src/examples/maxsat/ex.smt
 
@@ -48,7 +51,7 @@ if [ "X${PYTHON_BINDINGS}" = "X1" ]; then
   ${PYTHON_EXECUTABLE} python/example.py
   # FIXME: `hamiltonian.py` example is disabled because its too slow.
   #${PYTHON_EXECUTABLE} python/hamiltonian.py
-  ${PYTHON_EXECUTABLE} python/macro.py
+  ${PYTHON_EXECUTABLE} python/marco.py
   ${PYTHON_EXECUTABLE} python/mss.py
   ${PYTHON_EXECUTABLE} python/socrates.py
   ${PYTHON_EXECUTABLE} python/visitor.py
@@ -67,7 +70,7 @@ if [ "X${JAVA_BINDINGS}" = "X1" ]; then
   # Build Java example
   # FIXME: Move compilation step into CMake target
   mkdir -p examples/java
-  cp ${Z3_SRC_DIR}/examples/JavaExample.java examples/java/
+  cp ${Z3_SRC_DIR}/examples/java/JavaExample.java examples/java/
   javac examples/java/JavaExample.java -classpath com.microsoft.z3.jar
   # Run Java example
   if [ "$(uname)" = "Darwin" ]; then

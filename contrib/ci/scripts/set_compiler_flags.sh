@@ -40,3 +40,7 @@ echo "CC: ${CC}"
 ${CC} --version
 echo "CXX: ${CXX}"
 ${CXX} --version
+
+# Export the values
+export CFLAGS
+export CXXFLAGS
