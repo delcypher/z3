@@ -5,14 +5,40 @@ services:
 env:
   # Configurations
   matrix:
-    # Build and test everything but use Clang as the compiler x86_64
-    - LINUX_BASE=ubuntu_14.04 C_COMPILER=/usr/bin/clang-3.9 CXX_COMPILER=/usr/bin/clang++-3.9 TARGET_ARCH=x86_64
-    # Build and test everything but use GCC as the compiler x86_64
-    - LINUX_BASE=ubuntu_14.04 C_COMPILER=/usr/bin/gcc CXX_COMPILER=/usr/bin/g++ TARGET_ARCH=x86_64
-    # Build and test everything but use GCC as the compiler x86_64
-    - LINUX_BASE=ubuntu_14.04 C_COMPILER=/usr/bin/gcc CXX_COMPILER=/usr/bin/g++ TARGET_ARCH=i686
-    # Build and test everything but use Clang as the compiler i686
-    - LINUX_BASE=ubuntu_14.04 C_COMPILER=/usr/bin/clang-3.9 CXX_COMPILER=/usr/bin/clang++-3.9 TARGET_ARCH=i686
+###############################################################################
+# Ubuntu 14.04 LTS
+###############################################################################
+    # 64-bit GCC RelWithDebInfo
+    - LINUX_BASE=ubuntu_14.04 C_COMPILER=/usr/bin/gcc CXX_COMPILER=/usr/bin/g++ TARGET_ARCH=x86_64 Z3_BUILD_TYPE=RelWithDebInfo
+    #  64-bit Clang RelWithDebInfo
+    # FIXME: Can't use OpenMP on Ubuntu 14.04LTS with Clang due to no libomp
+    - LINUX_BASE=ubuntu_14.04 C_COMPILER=/usr/bin/clang-3.9 CXX_COMPILER=/usr/bin/clang++-3.9 TARGET_ARCH=x86_64 USE_OPENMP=0 Z3_BUILD_TYPE=RelWithDebInfo
+
+    # 64-bit GCC Debug
+    - LINUX_BASE=ubuntu_14.04 C_COMPILER=/usr/bin/gcc CXX_COMPILER=/usr/bin/g++ TARGET_ARCH=x86_64 Z3_BUILD_TYPE=Debug
+    #  64-bit Clang Debug
+    # FIXME: Can't use OpenMP on Ubuntu 14.04LTS with Clang due to no libomp
+    - LINUX_BASE=ubuntu_14.04 C_COMPILER=/usr/bin/clang-3.9 CXX_COMPILER=/usr/bin/clang++-3.9 TARGET_ARCH=x86_64 USE_OPENMP=0 Z3_BUILD_TYPE=Debug
+
+    # 32-bit GCC RelWithDebInfo
+    - LINUX_BASE=ubuntu_14.04 C_COMPILER=/usr/bin/gcc CXX_COMPILER=/usr/bin/g++ TARGET_ARCH=i686 Z3_BUILD_TYPE=RelWithDebInfo
+    # 32-bit Clang RelWithDebInfo
+    # FIXME: Can't use OpenMP on Ubuntu 14.04LTS with Clang due to no libomp
+    - LINUX_BASE=ubuntu_14.04 C_COMPILER=/usr/bin/clang-3.9 CXX_COMPILER=/usr/bin/clang++-3.9 TARGET_ARCH=i686 USE_OPENMP=0 Z3_BUILD_TYPE=RelWithDebInfo
+
+    # Test with Python 3
+    - LINUX_BASE=ubuntu_14.04 PYTHON_EXECUTABLE=/usr/bin/python3
+
+    # Test with LibGMP (have to use x86_64 due to libgmp not being available for i686)
+    - LINUX_BASE=ubuntu_14.04 TARGET_ARCH=x86_64 USE_LIBGMP=1
+
+    # TODO:
+    # LTO build
+    #- LINUX_BASE=ubuntu_14.04 C_COMPILER=/usr/bin/gcc CXX_COMPILER=/usr/bin/g++ TARGET_ARCH=x86_64 USE_LTO=1
+
+    # TODO:
+    # Unix Makefile generator build
+    #- LINUX_BASE=ubuntu_14.04 C_COMPILER=/usr/bin/gcc CXX_COMPILER=/usr/bin/g++ TARGET_ARCH=x86_64 Z3_CMAKE_GENERATOR="Unix Makefiles"
 
 # TODO: OSX support
 #matrix:
