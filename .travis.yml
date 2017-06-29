@@ -21,10 +21,10 @@ env:
     - LINUX_BASE=ubuntu_14.04 C_COMPILER=/usr/bin/clang-3.9 CXX_COMPILER=/usr/bin/clang++-3.9 TARGET_ARCH=x86_64 USE_OPENMP=0 Z3_BUILD_TYPE=Debug
 
     # 32-bit GCC RelWithDebInfo
-    - LINUX_BASE=ubuntu_14.04 C_COMPILER=/usr/bin/gcc CXX_COMPILER=/usr/bin/g++ TARGET_ARCH=i686 Z3_BUILD_TYPE=RelWithDebInfo
+    #- LINUX_BASE=ubuntu_14.04 C_COMPILER=/usr/bin/gcc CXX_COMPILER=/usr/bin/g++ TARGET_ARCH=i686 Z3_BUILD_TYPE=RelWithDebInfo
     # 32-bit Clang RelWithDebInfo
     # FIXME: Can't use OpenMP on Ubuntu 14.04LTS with Clang due to no libomp
-    - LINUX_BASE=ubuntu_14.04 C_COMPILER=/usr/bin/clang-3.9 CXX_COMPILER=/usr/bin/clang++-3.9 TARGET_ARCH=i686 USE_OPENMP=0 Z3_BUILD_TYPE=RelWithDebInfo
+    #- LINUX_BASE=ubuntu_14.04 C_COMPILER=/usr/bin/clang-3.9 CXX_COMPILER=/usr/bin/clang++-3.9 TARGET_ARCH=i686 USE_OPENMP=0 Z3_BUILD_TYPE=RelWithDebInfo
 
     # Test with Python 3
     - LINUX_BASE=ubuntu_14.04 PYTHON_EXECUTABLE=/usr/bin/python3
