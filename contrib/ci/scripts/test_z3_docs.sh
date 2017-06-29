@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPT_DIR="$( cd ${BASH_SOURCE[0]%/*} ; echo $PWD )"
-#. ${SCRIPT_DIR}/run_quiet.sh
+. ${SCRIPT_DIR}/run_quiet.sh
 
 set -x
 set -e
@@ -18,7 +18,7 @@ cd "${Z3_BUILD_DIR}"
 # Generate documentation
 if [ "X${BUILD_DOCS}" = "X1" ]; then
   # TODO: Make quiet once we've fixed the build
-  cmake --build $(pwd) --target api_docs "${GENERATOR_ARGS[@]}"
+  run_quiet cmake --build $(pwd) --target api_docs "${GENERATOR_ARGS[@]}"
 fi
 
 # TODO: Test or perhaps deploy the built docs?
