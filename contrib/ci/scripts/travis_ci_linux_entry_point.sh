@@ -118,6 +118,13 @@ if [ -n "${Z3_VERBOSE_BUILD_OUTPUT}" ]; then
   )
 fi
 
+if [ -n "${NO_SUPPRESS_OUTPUT}" ]; then
+  BUILD_OPTS+=( \
+    "--build-arg" \
+    "NO_SUPPRESS_OUTPUT=${NO_SUPPRESS_OUTPUT}" \
+  )
+fi
+
 # TODO: Installing dependencies should be separated from building Z3
 # so that we can cache that stage and re-use it for subsequent builds
 # to make the build faster.
