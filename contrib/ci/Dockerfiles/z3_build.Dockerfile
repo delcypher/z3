@@ -94,7 +94,7 @@ RUN ${Z3_SRC_DIR}/contrib/ci/scripts/test_z3_unit_tests_cmake.sh
 
 # Run system tests
 ADD \
-  /contrib/ci/scripts/test_z3_system_tests_cmake.sh \
+  /contrib/ci/scripts/test_z3_system_tests.sh \
   ${Z3_SRC_DIR}/contrib/ci/scripts/
 RUN ${Z3_SRC_DIR}/contrib/ci/scripts/test_z3_system_tests.sh
 
