@@ -3,6 +3,7 @@
 # This script tests Z3
 
 SCRIPT_DIR="$( cd ${BASH_SOURCE[0]%/*} ; echo $PWD )"
+. ${SCRIPT_DIR}/run_quiet.sh
 
 set -x
 set -e
@@ -24,21 +25,23 @@ cd "${Z3_BUILD_DIR}"
 
 # Build and run C example
 cmake --build $(pwd) --target c_example "${GENERATOR_ARGS[@]}"
-examples/c_example_build_dir/c_example
+run_quiet examples/c_example_build_dir/c_example
 
 # Build and run C++ example
 cmake --build $(pwd) --target cpp_example "${GENERATOR_ARGS[@]}"
-examples/cpp_example_build_dir/cpp_example
+run_quiet examples/cpp_example_build_dir/cpp_example
 
 # Build and run tptp5 example
 cmake --build $(pwd) --target z3_tptp5 "${GENERATOR_ARGS[@]}"
 # FIXME: Do something more useful with example
-examples/tptp_build_dir/z3_tptp5 -help
+run_quiet examples/tptp_build_dir/z3_tptp5 -help
 
 # Build an run c_maxsat_example
 cmake --build $(pwd) --target c_maxsat_example "${GENERATOR_ARGS[@]}"
 # FIXME: Once maxsat is fixed so it doesn't crash, enable running it
-#./c_maxsat_example ${Z3_SRC_DIR}/src/examples/maxsat/ex.smt
+run_quiet \
+  examples/c_maxsat_example_build_dir/c_maxsat_example \
+  ${Z3_SRC_DIR}/src/examples/maxsat/ex.smt
 
 
 if [ "X${PYTHON_BINDINGS}" = "X1" ]; then
@@ -46,16 +49,16 @@ if [ "X${PYTHON_BINDINGS}" = "X1" ]; then
   # `all_interval_series.py` produces a lot of output so just throw
   # away output.
   # TODO: This example is slow should we remove it from testing?
-  ${PYTHON_EXECUTABLE} python/all_interval_series.py > /dev/null
-  ${PYTHON_EXECUTABLE} python/complex.py
-  ${PYTHON_EXECUTABLE} python/example.py
+  run_quiet ${PYTHON_EXECUTABLE} python/all_interval_series.py
+  run_quiet ${PYTHON_EXECUTABLE} python/complex.py
+  run_quiet ${PYTHON_EXECUTABLE} python/example.py
   # FIXME: `hamiltonian.py` example is disabled because its too slow.
   #${PYTHON_EXECUTABLE} python/hamiltonian.py
-  ${PYTHON_EXECUTABLE} python/marco.py
-  ${PYTHON_EXECUTABLE} python/mss.py
-  ${PYTHON_EXECUTABLE} python/socrates.py
-  ${PYTHON_EXECUTABLE} python/visitor.py
-  ${PYTHON_EXECUTABLE} python/z3test.py
+  run_quiet ${PYTHON_EXECUTABLE} python/marco.py
+  run_quiet ${PYTHON_EXECUTABLE} python/mss.py
+  run_quiet ${PYTHON_EXECUTABLE} python/socrates.py
+  run_quiet ${PYTHON_EXECUTABLE} python/visitor.py
+  run_quiet ${PYTHON_EXECUTABLE} python/z3test.py
 fi
 
 if [ "X${DOTNET_BINDINGS}" = "X1" ]; then
@@ -63,7 +66,7 @@ if [ "X${DOTNET_BINDINGS}" = "X1" ]; then
   # FIXME: Move compliation step into CMake target
   mcs ${Z3_SRC_DIR}/examples/dotnet/Program.cs /target:exe /out:dotnet_test.exe /reference:Microsoft.Z3.dll /r:System.Numerics.dll
   # Run .NET example
-  mono ./dotnet_test.exe
+  run_quiet mono ./dotnet_test.exe
 fi
 
 if [ "X${JAVA_BINDINGS}" = "X1" ]; then
@@ -75,10 +78,11 @@ if [ "X${JAVA_BINDINGS}" = "X1" ]; then
   # Run Java example
   if [ "$(uname)" = "Darwin" ]; then
     # macOS
-    DYLD_LIBRARY_PATH=$(pwd) java -cp .:examples/java:com.microsoft.z3.jar JavaExample
+    export DYLD_LIBRARY_PATH=$(pwd):${DYLD_LIBRARY_PATH}
   else
     # Assume Linux for now
-    LD_LIBRARY_PATH=$(pwd) java -cp .:examples/java:com.microsoft.z3.jar JavaExample
+    export LD_LIBRARY_PATH=$(pwd):${LD_LIBRARY_PATH}
   fi
+  run_quiet java -cp .:examples/java:com.microsoft.z3.jar JavaExample
 fi
 
