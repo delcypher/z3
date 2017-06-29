@@ -10,6 +10,7 @@ RUN apt-get update && \
         gcc-multilib \
         gcc-4.8-multilib \
         git \
+        graphviz \
         g++-multilib \
         g++-4.8-multilib \
         libasan0 \
