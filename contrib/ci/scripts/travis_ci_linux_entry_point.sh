@@ -10,15 +10,6 @@ DOCKER_FILE_DIR="$(cd ${SCRIPT_DIR}/../Dockerfiles; echo $PWD)"
 
 : ${LINUX_BASE?"LINUX_BASE must be specified"}
 
-case ${LINUX_BASE} in
-  ubuntu_14.04)
-    DOCKER_FILE="${DOCKER_FILE_DIR}/z3_base_ubuntu_14.04.Dockerfile"
-    ;;
-  *)
-    echo "Unknown Linux base ${LINUX_BASE}"
-    exit 1
-    ;;
-esac
 
 
 # Sanity check. Current working directory should be repo root
@@ -125,7 +116,27 @@ if [ -n "${NO_SUPPRESS_OUTPUT}" ]; then
   )
 fi
 
-# TODO: Installing dependencies should be separated from building Z3
-# so that we can cache that stage and re-use it for subsequent builds
-# to make the build faster.
-docker build -f "${DOCKER_FILE}" "${BUILD_OPTS[@]}" .
+case ${LINUX_BASE} in
+  ubuntu_14.04)
+    BASE_DOCKER_FILE="${DOCKER_FILE_DIR}/z3_base_ubuntu_14.04.Dockerfile"
+    BASE_DOCKER_IMAGE_NAME="z3_base_ubuntu:14.04"
+    ;;
+  *)
+    echo "Unknown Linux base ${LINUX_BASE}"
+    exit 1
+    ;;
+esac
+
+# TODO: For TravisCI implement a persistent cache
+# Build base image (without a context)
+# The base image contains all the dependencies we want to build
+# Z3.
+docker build -t "${BASE_DOCKER_IMAGE_NAME}" - < "${BASE_DOCKER_FILE}"
+
+
+# Now build Z3 and test it using the created base image
+docker build \
+  -f "${DOCKER_FILE_DIR}/z3_build.Dockerfile" \
+  "${BUILD_OPTS[@]}" \
+  --build-arg DOCKER_IMAGE_BASE=${BASE_DOCKER_IMAGE_NAME} \
+  .
