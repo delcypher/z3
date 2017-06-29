@@ -5,6 +5,7 @@ set -e
 set -o pipefail
 
 : ${Z3_BUILD_DIR?"Z3_BUILD_DIR must be specified"}
+: ${Z3_BUILD_TYPE?"Z3_BUILD_TYPE must be specified"}
 : ${RUN_SYSTEM_TESTS?"RUN_SYSTEM_TESTS must be speicifed"}
 : ${PYTHON_BINDINGS?"PYTHON_BINDINGS must be specified"}
 : ${PYTHON_EXECUTABLE?"PYTHON_EXECUTABLE must be specified"}
@@ -39,9 +40,15 @@ fi
 # SMTLIBv2 tests
 ${PYTHON_EXECUTABLE} scripts/test_benchmarks.py "${Z3_EXE}" regressions/smt2
 
+${PYTHON_EXECUTABLE} scripts/test_benchmarks.py "${Z3_EXE}" regressions/smt2-extra
+
+if [ "X${Z3_BUILD_TYPE}" = "XDebug" ]; then
+  ${PYTHON_EXECUTABLE} scripts/test_benchmarks.py "${Z3_EXE}" regressions/smt2-debug
+fi
+
 if [ "X${PYTHON_BINDINGS}" = "X1" ]; then
   # Run python binding tests
   ${PYTHON_EXECUTABLE} scripts/test_pyscripts.py "${Z3_LIB_DIR}" regressions/python/
 fi
 
-# TODO: Run other tests
+# FIXME: Run `scripts/test_cs.py` once it has been modified to support mono
