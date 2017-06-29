@@ -133,10 +133,26 @@ esac
 # Z3.
 docker build -t "${BASE_DOCKER_IMAGE_NAME}" - < "${BASE_DOCKER_FILE}"
 
+DOCKER_MAJOR_VERSION=$(docker info 2> /dev/null | grep 'Server Version:' | sed 's/Server Version:[ ]\+\([0-9]\+\).\+$/\1/')
+DOCKER_BUILD_FILE="${DOCKER_FILE_DIR}/z3_build.Dockerfile"
+
+if [ "${DOCKER_MAJOR_VERSION}" -lt 17 ]; then
+  # Workaround limitation in older Docker versions where the FROM
+  # command cannot be parameterized with an ARG.
+  sed \
+    -e '/^ARG DOCKER_IMAGE_BASE/d' \
+    -e 's/${DOCKER_IMAGE_BASE}/'"${BASE_DOCKER_IMAGE_NAME}/" \
+    "${DOCKER_BUILD_FILE}" > "${DOCKER_BUILD_FILE}.patched"
+  DOCKER_BUILD_FILE="${DOCKER_BUILD_FILE}.patched"
+else
+  BUILD_OPTS+=( \
+    "--build-arg" \
+    "DOCKER_IMAGE_BASE=${BASE_DOCKER_IMAGE_NAME}" \
+  )
+fi
 
 # Now build Z3 and test it using the created base image
 docker build \
-  -f "${DOCKER_FILE_DIR}/z3_build.Dockerfile" \
+  -f "${DOCKER_BUILD_FILE}" \
   "${BUILD_OPTS[@]}" \
-  --build-arg DOCKER_IMAGE_BASE=${BASE_DOCKER_IMAGE_NAME} \
   .
