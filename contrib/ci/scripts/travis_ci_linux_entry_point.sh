@@ -146,6 +146,8 @@ if [ "${DOCKER_MAJOR_VERSION}${DOCKER_MINOR_VERSION}" -lt 1705 ]; then
     "${DOCKER_BUILD_FILE}" > "${DOCKER_BUILD_FILE}.patched"
   DOCKER_BUILD_FILE="${DOCKER_BUILD_FILE}.patched"
 else
+  # This feature landed in Docker 17.05
+  # See https://github.com/moby/moby/pull/31352
   BUILD_OPTS+=( \
     "--build-arg" \
     "DOCKER_IMAGE_BASE=${BASE_DOCKER_IMAGE_NAME}" \
