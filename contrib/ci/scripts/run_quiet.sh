@@ -5,11 +5,13 @@
 #
 # The use case for this trying to avoid large logs on TravisCI
 function run_quiet() {
-  TMP_DIR="${TMP_DIR:-/tmp/}"
   if [ "X${NO_SUPPRESS_OUTPUT}" = "X1" ]; then
     "${@}"
   else
+    OLD_SETTINGS="$-"
+    set +x
     set +e
+    TMP_DIR="${TMP_DIR:-/tmp/}"
     STDOUT="${TMP_DIR}/$$.stdout"
     STDERR="${TMP_DIR}/$$.stderr"
     "${@}" > "${STDOUT}" 2> "${STDERR}"
@@ -32,7 +34,8 @@ function run_quiet() {
     fi
     # Clean up
     rm "${STDOUT}" "${STDERR}"
+    [ $( echo "${OLD_SETTINGS}" | grep -c 'e') -ne 0 ] && set -e
+    [ $( echo "${OLD_SETTINGS}" | grep -c 'x') -ne 0 ] && set -x
     return ${EXIT_STATUS}
-    set -e
   fi
 }
