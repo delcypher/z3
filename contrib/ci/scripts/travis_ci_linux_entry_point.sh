@@ -134,9 +134,10 @@ esac
 docker build -t "${BASE_DOCKER_IMAGE_NAME}" - < "${BASE_DOCKER_FILE}"
 
 DOCKER_MAJOR_VERSION=$(docker info 2> /dev/null | grep 'Server Version:' | sed 's/Server Version:[ ]\+\([0-9]\+\).\+$/\1/')
+DOCKER_MINOR_VERSION=$(docker info 2> /dev/null | grep 'Server Version:' | sed 's/Server Version:[ ]\+[0-9]\+\.\([0-9]\+\).\+$/\1/')
 DOCKER_BUILD_FILE="${DOCKER_FILE_DIR}/z3_build.Dockerfile"
 
-if [ "${DOCKER_MAJOR_VERSION}" -lt 17 ]; then
+if [ "${DOCKER_MAJOR_VERSION}${DOCKER_MINOR_VERSION}" -lt 1705 ]; then
   # Workaround limitation in older Docker versions where the FROM
   # command cannot be parameterized with an ARG.
   sed \
