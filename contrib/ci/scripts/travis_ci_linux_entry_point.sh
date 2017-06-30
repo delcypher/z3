@@ -54,7 +54,7 @@ if [ -n "${JAVA_BINDINGS}" ]; then
 fi
 
 if [ -n "${USE_LTO}" ]; then
-  BUILD_OPTS+=("--build-arg" "USE_LTO=${BUILD_DOCS}")
+  BUILD_OPTS+=("--build-arg" "USE_LTO=${USE_LTO}")
 fi
 
 if [ -n "${Z3_INSTALL_PREFIX}" ]; then
