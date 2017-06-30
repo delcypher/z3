@@ -1,8 +1,17 @@
+cache:
+  # This persistent cache is used to cache the building of
+  # docker base images.
+  directories:
+    - $DOCKER_TRAVIS_CI_CACHE_DIR
 sudo: required
 language: cpp
 services:
   - docker
 env:
+  global:
+    # This environment variable tells the `travis_ci_linux_entry_point.sh`
+    # script to look for a cached Docker image.
+    - DOCKER_TRAVIS_CI_CACHE_DIR=$HOME/.cache/docker
   # Configurations
   matrix:
 ###############################################################################

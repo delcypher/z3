@@ -131,11 +131,45 @@ case ${LINUX_BASE} in
     ;;
 esac
 
-# TODO: For TravisCI implement a persistent cache
-# Build base image (without a context)
-# The base image contains all the dependencies we want to build
-# Z3.
-docker build -t "${BASE_DOCKER_IMAGE_NAME}" - < "${BASE_DOCKER_FILE}"
+# Initially assume that we need to build the base Docker image
+MUST_BUILD=1
+
+# Travis CI persistent cache.
+# This inspired by http://rundef.com/fast-travis-ci-docker-build .
+# The idea is to cache the built image for subsequent builds to
+# reduce build time.
+if [ -n "${DOCKER_TRAVIS_CI_CACHE_DIR}" ]; then
+  CHECKSUM_FILE="${DOCKER_TRAVIS_CI_CACHE_DIR}/${BASE_DOCKER_IMAGE_NAME}.chksum"
+  CACHED_DOCKER_IMAGE="${DOCKER_TRAVIS_CI_CACHE_DIR}/${BASE_DOCKER_IMAGE_NAME}.gz"
+  if [ -f "${CACHED_DOCKER_IMAGE}" ]; then
+    # There's a cached image to use. Check the checksums of the Dockerfile
+    # match. If they don't that implies we need to build a fresh image.
+    if [ -f "${CHECKSUM_FILE}" ]; then
+      CURRENT_DOCKERFILE_CHECKSUM=$(sha256sum "${BASE_DOCKER_FILE}" | awk '{ print $1 }')
+      CACHED_DOCKERFILE_CHECKSUM=$(cat "${CHECKSUM_FILE}")
+      if [ "X${CURRENT_DOCKERFILE_CHECKSUM}" = "X${CACHED_DOCKERFILE_CHECKSUM}" ]; then
+        # Load the cached image
+        MUST_BUILD=0
+        gunzip --stdout "${CACHED_DOCKER_IMAGE}" | docker load
+      fi
+    fi
+  fi
+fi
+
+if [ "${MUST_BUILD}" -eq 1 ]; then
+  # The base image contains all the dependencies we want to build
+  # Z3.
+  docker build -t "${BASE_DOCKER_IMAGE_NAME}" - < "${BASE_DOCKER_FILE}"
+
+  if [ -n "${DOCKER_TRAVIS_CI_CACHE_DIR}" ]; then
+    # Write image and checksum to cache
+    docker save "${BASE_DOCKER_IMAGE_NAME}" | \
+      gzip > "${CACHED_DOCKER_IMAGE}"
+    sha256sum "${BASE_DOCKER_FILE}" | awk '{ print $1 }' > \
+      "${CHECKSUM_FILE}"
+  fi
+fi
+
 
 DOCKER_MAJOR_VERSION=$(docker info --format '{{.ServerVersion}}' | sed 's/^\([0-9]\+\)\.\([0-9]\+\).*$/\1/')
 DOCKER_MINOR_VERSION=$(docker info --format '{{.ServerVersion}}' | sed 's/^\([0-9]\+\)\.\([0-9]\+\).*$/\2/')
