@@ -38,10 +38,9 @@ run_quiet examples/tptp_build_dir/z3_tptp5 -help
 
 # Build an run c_maxsat_example
 cmake --build $(pwd) --target c_maxsat_example "${GENERATOR_ARGS[@]}"
-# FIXME: Once maxsat is fixed so it doesn't crash, enable running it
 run_quiet \
   examples/c_maxsat_example_build_dir/c_maxsat_example \
-  ${Z3_SRC_DIR}/src/examples/maxsat/ex.smt
+  ${Z3_SRC_DIR}/examples/maxsat/ex.smt
 
 
 if [ "X${PYTHON_BINDINGS}" = "X1" ]; then
