@@ -70,12 +70,15 @@ ADD *.txt *.md RELEASE_NOTES ${Z3_SRC_DIR}/
 
 ADD \
   /contrib/ci/scripts/build_z3_cmake.sh \
+  /contrib/ci/scripts/set_compiler_flags.sh \
+  /contrib/ci/scripts/set_generator_args.sh \
   ${Z3_SRC_DIR}/contrib/ci/scripts/
 RUN ${Z3_SRC_DIR}/contrib/ci/scripts/build_z3_cmake.sh
 
 # Test building docs
 ADD \
   /contrib/ci/scripts/test_z3_docs.sh \
+  /contrib/ci/scripts/run_quiet.sh \
   ${Z3_SRC_DIR}/contrib/ci/scripts/
 RUN ${Z3_SRC_DIR}/contrib/ci/scripts/test_z3_docs.sh
 
