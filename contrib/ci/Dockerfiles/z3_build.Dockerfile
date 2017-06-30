@@ -58,7 +58,6 @@ ENV \
 # We add context across incrementally to maximal cache reuse
 
 # Build Z3
-ADD / /home/user/z3_src
 RUN mkdir -p "${Z3_SRC_DIR}" && \
   mkdir -p "${Z3_SRC_DIR}/contrib/ci/scripts"
 # Deliberately leave out `contrib`
