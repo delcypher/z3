@@ -28,9 +28,7 @@ env:
     - LINUX_BASE=ubuntu_16.04 C_COMPILER=/usr/bin/clang-3.9 CXX_COMPILER=/usr/bin/clang++-3.9 TARGET_ARCH=x86_64 Z3_BUILD_TYPE=Debug
 
     # 32-bit GCC 5.4 RelWithDebInfo
-    #- LINUX_BASE=ubuntu_16.04 C_COMPILER=/usr/bin/gcc CXX_COMPILER=/usr/bin/g++ TARGET_ARCH=i686 Z3_BUILD_TYPE=RelWithDebInfo
-    # 32-bit Clang 3.9 RelWithDebInfo
-    #- LINUX_BASE=ubuntu_16.04 C_COMPILER=/usr/bin/clang-3.9 CXX_COMPILER=/usr/bin/clang++-3.9 TARGET_ARCH=i686 Z3_BUILD_TYPE=RelWithDebInfo
+    - LINUX_BASE=ubuntu32_16.04 C_COMPILER=/usr/bin/gcc-5 CXX_COMPILER=/usr/bin/g++-5 TARGET_ARCH=i686 Z3_BUILD_TYPE=RelWithDebInfo
 
     # Test with Python 3
     - LINUX_BASE=ubuntu_16.04 PYTHON_EXECUTABLE=/usr/bin/python3
