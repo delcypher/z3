@@ -56,6 +56,10 @@ The `scripts/travis_ci_linux_entry_point.sh` script
 If an environemnt variable is not set a defaults value is used which can be
 found in `Dockerfiles/z3_build.Dockerfile`.
 
+#### Linux specific configuration variables
+
+* `LINUX_BASE` - The base docker image identifier to use (`ubuntu_16.04`, `ubuntu32_16.04`, or `ubuntu_14.04`).
+
 #### Reproducing a build locally
 
 A build can be reproduced locally by using the `scripts/travis_ci_linux_entry_point.sh`
@@ -74,7 +78,7 @@ This can be done by running the command
 LINUX_BASE=ubuntu_16.04 C_COMPILER=/usr/bin/gcc-5 CXX_COMPILER=/usr/bin/g++-5 TARGET_ARCH=x86_64 Z3_BUILD_TYPE=RelWithDebInfo scripts/travis_ci_linux_entry_point.sh
 ```
 
-Note that the `docker build` command which we use supports caching. What this
+The `docker build` command which we use internally supports caching. What this
 means in practice is that re-running the above command will re-use successfully
 completed stages of the build provided they haven't changed. This requires that
 the `Dockerfiles/z3_build.Dockerfile` is carefully crafted to avoid invalidating
