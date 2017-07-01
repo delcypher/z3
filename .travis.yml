@@ -30,10 +30,12 @@ env:
     # 32-bit GCC 5.4 RelWithDebInfo
     - LINUX_BASE=ubuntu32_16.04 C_COMPILER=/usr/bin/gcc-5 CXX_COMPILER=/usr/bin/g++-5 TARGET_ARCH=i686 Z3_BUILD_TYPE=RelWithDebInfo
 
+    # Both of the two configurations below build the docs because the current
+    # implementation uses python as part of the building process.
+    # TODO: Teach one of the configurations to upload built docs somewhere.
     # Test with Python 3 and API docs
     - LINUX_BASE=ubuntu_16.04 PYTHON_EXECUTABLE=/usr/bin/python3 BUILD_DOCS=1
-
-    # Test with LibGMP and API docs (use python2 explicitly because buildings relies on python)
+    # Test with LibGMP and API docs
     - LINUX_BASE=ubuntu_16.04 TARGET_ARCH=x86_64 USE_LIBGMP=1 BUILD_DOCS=1 PYTHON_EXECUTABLE=/usr/bin/python2.7
 
     # Test without OpenMP
