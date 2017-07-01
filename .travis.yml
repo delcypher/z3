@@ -19,12 +19,12 @@ env:
 ###############################################################################
     # 64-bit GCC 5.4 RelWithDebInfo
     - LINUX_BASE=ubuntu_16.04 C_COMPILER=/usr/bin/gcc-5 CXX_COMPILER=/usr/bin/g++-5 TARGET_ARCH=x86_64 Z3_BUILD_TYPE=RelWithDebInfo
-    #  64-bit Clang 3.9 RelWithDebInfo
+    # 64-bit Clang 3.9 RelWithDebInfo
     - LINUX_BASE=ubuntu_16.04 C_COMPILER=/usr/bin/clang-3.9 CXX_COMPILER=/usr/bin/clang++-3.9 TARGET_ARCH=x86_64 Z3_BUILD_TYPE=RelWithDebInfo
 
     # 64-bit GCC 5.4 Debug
     - LINUX_BASE=ubuntu_16.04 C_COMPILER=/usr/bin/gcc-5 CXX_COMPILER=/usr/bin/g++-5 TARGET_ARCH=x86_64 Z3_BUILD_TYPE=Debug
-    #  64-bit Clang Debug
+    # 64-bit Clang Debug
     - LINUX_BASE=ubuntu_16.04 C_COMPILER=/usr/bin/clang-3.9 CXX_COMPILER=/usr/bin/clang++-3.9 TARGET_ARCH=x86_64 Z3_BUILD_TYPE=Debug
 
     # 32-bit GCC 5.4 RelWithDebInfo
@@ -47,7 +47,6 @@ env:
 
     # Static build. Note we have disable building the bindings because they won't work with a static libz3
     - LINUX_BASE=ubuntu_16.04 C_COMPILER=/usr/bin/gcc-5 CXX_COMPILER=/usr/bin/g++-5 TARGET_ARCH=x86_64 Z3_STATIC_BUILD=1 DOTNET_BINDINGS=0 JAVA_BINDINGS=0 PYTHON_BINDINGS=0
-
 
 ###############################################################################
 # Ubuntu 14.04 LTS
