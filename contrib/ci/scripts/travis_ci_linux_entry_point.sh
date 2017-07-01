@@ -109,6 +109,10 @@ if [ -n "${Z3_VERBOSE_BUILD_OUTPUT}" ]; then
   )
 fi
 
+if [ -n "${Z3_STATIC_BUILD}" ]; then
+  BUILD_OPTS+=("--build-arg" "Z3_STATIC_BUILD=${Z3_STATIC_BUILD}")
+fi
+
 if [ -n "${NO_SUPPRESS_OUTPUT}" ]; then
   BUILD_OPTS+=( \
     "--build-arg" \

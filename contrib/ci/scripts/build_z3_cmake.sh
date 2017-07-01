@@ -11,6 +11,7 @@ set -o pipefail
 : ${Z3_BUILD_DIR?"Z3_BUILD_DIR must be specified"}
 : ${Z3_BUILD_TYPE?"Z3_BUILD_TYPE must be specified"}
 : ${Z3_CMAKE_GENERATOR?"Z3_CMAKE_GENERATOR must be specified"}
+: ${Z3_STATIC_BUILD?"Z3_STATIC_BUILD must be specified"}
 : ${USE_OPENMP?"USE_OPENMP must be specified"}
 : ${USE_LIBGMP?"USE_LIBGMP must be specified"}
 : ${BUILD_DOCS?"BUILD_DOCS must be specified"}
