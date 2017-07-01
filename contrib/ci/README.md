@@ -16,6 +16,10 @@ The scripts rely on a set of environment variables to control the configuration
 of the build. The `.travis.yml` declares a list of configuration with each
 configuration setting different environment variables.
 
+Note that the build scripts currently only support Z3 built with CMake. Support
+for building Z3 using the older Python/Makefile build system might be added in
+the future.
+
 ### Configuration variables
 
 * `ASAN_BUILD` - Do [AddressSanitizer](https://github.com/google/sanitizers/wiki/AddressSanitizer) build (`0` or `1`)

@@ -5,7 +5,7 @@ FROM ${DOCKER_IMAGE_BASE}
 # Specify defaults. This can be changed when invoking
 # `docker build`.
 ARG ASAN_BUILD=0
-ARG BUILD_DOCS=1
+ARG BUILD_DOCS=0
 ARG CC=gcc
 ARG CXX=g++
 ARG DOTNET_BINDINGS=1
